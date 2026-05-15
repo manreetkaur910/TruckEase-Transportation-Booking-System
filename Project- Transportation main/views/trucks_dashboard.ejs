@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Truck Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap css -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- css file link -->
+  <link rel="stylesheet" href="/css/trucks_dashboard.css">
+
+  <style>
+    .filter-scroll {
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.short-input {
+  width: 180px;
+  min-width: 150px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.short-input:focus {
+  width: 220px;
+  transition: width 0.3s ease;
+}
+/* back button */
+.a-back {
+  right:30px;
+  top:20px;
+  font-size:18px;
+  font-weight:600;
+}
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* sidebar */
+.sidebar {
+  background: linear-gradient(to right, #141e30, #243b55);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px; /* Increased sidebar width */
+  padding-top: 1rem;
+  color: white;
+  overflow-y: auto;
+}
+
+.sidebar h2,
+.sidebar h5 {
+  padding-left: 1rem;
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.sidebar a {
+  color: #adb5bd;
+  padding: 0.5rem 1.25rem;
+  display: block;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar a:hover {
+  background-color: #495057;
+  color: white;
+}
+
+/* back btn */
+.a-back {
+  position: absolute;
+  right: 30px;
+  top: 20px;
+  border-radius: 25px;
+}
+
+/* main content */
+.main {
+  margin-left: 280px; /* Adjusted for the increased sidebar width */
+  padding: 2rem;
+}
+
+.main h1 {
+  font-weight: 600;
+  color: #343a40;
+}
+
+/* h4-to select */
+.h4-selTruck {
+  font-weight: 600;
+  font-size: 2.5rem;
+  color: #000;
+  margin-top: 1rem;
+}
+
+/* booking form */
+form .form-control {
+  border-radius: 8px;
+}
+
+form .btn {
+  border-radius: 8px;
+}
+
+/* booking table */
+.table th, .table td {
+  vertical-align: middle;
+}
+
+.table thead th {
+  background-color: #343a40;
+  color: white;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h4 class="text-white text-center">GKTC</h4>
+    <% trucks.forEach(truck => { %>
+      <div class="d-flex justify-content-between align-items-center px-3 my-1">
+        <a href="/admin/trucks_dashboard/?truck=<%= truck._id %>" class="flex-grow-1 text-truncate"><%= truck.name %></a>
+        <div class="d-flex">
+          <!-- Edit Button -->
+          <button class="btn btn-sm btn-warning ms-1 edit-btn" data-id="<%= truck._id %>" data-name="<%= truck.name %>" data-license="<%= truck.licensePlate %>" data-weight="<%= truck.estimatedWeight %>"> Edit </button>
+
+          <!-- Delete Button -->
+          <form action="/trucks/<%= truck._id %>?_method=DELETE" method="POST" class="ms-1">
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+
+    <hr class="bg-light mx-3">
+
+    <div class="px-3">
+        <form id="truck-form" action="/trucks" method="POST">
+          <h5 id="form-title">Add Truck</h5>
+          <input type="hidden" name="_method" id="form-method" value="POST" />
+          <input type="text" class="form-control my-1" name="name" id="truck-name" placeholder="Truck Name" required />
+          <input type="text" class="form-control my-1" name="licensePlate" id="truck-license" placeholder="License Plate" required />
+          <input type="text" class="form-control my-1" name="estimatedWeight" id="truck-weight" placeholder="Estimated Weight(in Tonnes)" required />
+          <button class="btn btn-primary w-100" type="submit" id="form-submit">Add Truck</button>
+          <button type="button" class="btn btn-secondary w-100 mt-2 d-none" id="cancel-edit">Cancel</button>
+        </form>        
+  </div>
+  </div>
+  <!-- Main Content -->
+  <div class="main">
+    <div class="container-fluid">
+      <a href="/admin/dashboard" class="btn btn-outline-primary ms-2 a-back" style="border-radius: 25px; position:absolute">
+          &#129092; Back<i class="fa-solid fa-sign-out-alt ms-1"></i>
+      </a>
+    </div>
+    <% if (selectedTruck) { %>
+      <h2>Bookings for <%= selectedTruck.name %></h2>
+      <br>
+      <table class="table table-bordered table-striped w-75">
+        <thead class="table-light">
+          <tr>
+            <th>Truck Name</th>
+            <th>License Plate</th>
+            <th>Estimated Weight</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= selectedTruck.name %></td>
+            <td><%= selectedTruck.licensePlate %></td>
+            <td><%= selectedTruck.estimatedWeight %></td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+      <br>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Customer Bookings</h2>
+        <a href="/truckbookings/new?truck=<%= selectedTruck._id %>" class="btn btn-primary">Add Booking</a>
+      </div>
+      
+  <!-- Filters Row -->
+  <div class="card p-3 mb-3 shadow-sm">
+    <h5 class="mb-3">Filter Bookings</h5>
+
+    <div class="d-flex flex-wrap justify-content-start gap-2">
+      <div class="flex-shrink-0" style="width: 150px;">
+        <label class="form-label">Customer</label>
+        <input type="text" class="form-control filter-input" placeholder="Customer" data-col="0">
+      </div>
+      <div class="flex-shrink-0" style="width: 150px;">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control filter-input" placeholder="Email" data-col="1">
+      </div>
+      <div class="flex-shrink-0" style="width: 150px;">
+        <label class="form-label">Phone</label>
+        <input type="text" class="form-control filter-input" placeholder="Phone" data-col="2">
+      </div>
+      <div class="flex-shrink-0" style="width: 150px;">
+        <label class="form-label">Pickup Location</label>
+        <input type="text" class="form-control filter-input" placeholder="Pickup Location" data-col="3">
+      </div>
+      <div class="flex-shrink-0" style="width: 150px;">
+        <label class="form-label">Dropoff Location</label>
+        <input type="text" class="form-control filter-input" placeholder="Dropoff Location" data-col="4">
+      </div>
+      <div class="flex-shrink-0" style="width: 140px;">
+        <label class="form-label">Pickup Date</label>
+        <input type="date" class="form-control filter-input" data-col="5">
+      </div>
+      <div class="flex-shrink-0" style="width: 140px;">
+        <label class="form-label">Pickup Time</label>
+        <input type="time" class="form-control filter-input" data-col="6">
+      </div>
+      <div class="flex-shrink-0" style="width: 140px;">
+        <label class="form-label">Dropoff Date</label>
+        <input type="date" class="form-control filter-input" data-col="7">
+      </div>
+      <div class="flex-shrink-0" style="width: 140px;">
+        <label class="form-label">Dropoff Time</label>
+        <input type="time" class="form-control filter-input" data-col="8">
+      </div>
+      <div class="flex-shrink-0" style="width: 140px;">
+        <label class="form-label">Delivery Date</label>
+        <input type="date" class="form-control filter-input" data-col="10">
+      </div>
+      <div class="flex-shrink-0" style="width: 140px;">
+        <label class="form-label">Delivery Time</label>
+        <input type="time" class="form-control filter-input" data-col="11">
+      </div>
+      <div class="d-flex align-items-end ms-auto" style="width: 100px;">
+        <button class="btn btn-sm btn-outline-secondary w-100" onclick="clearFilters()">Clear</button>
+      </div>
+    </div>
+  </div>
+
+
+    <% } else { %>
+      <h4 class="h4-selTruck">Select a truck to view its bookings.</h4>
+    <% } %>
+
+
+    <!-- Show table always, even if no truck is selected -->
+    <table class="table table-bordered table-hover mt-4">
+      <thead class="table-dark">
+        <tr>
+          <th>Customer</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Pickup Location</th>
+          <th>Dropoff Location</th>
+          <th>Pickup Date</th>
+          <th>Pickup Time</th>
+          <th>Dropoff Date</th>
+          <th>Dropoff Time</th>
+          <th>Customer's Delivery Date</th>
+          <th>Customer's Delivery Time</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (truckBookings.length > 0) { %>
+          <% truckBookings.forEach(truckBooking => { %>
+            <tr>
+              <td><%= truckBooking.customerName %></td>
+              <td><%= truckBooking.email %></td>
+              <td><%= truckBooking.phone %></td>
+              <td><%= truckBooking.pickupLocation %></td>
+              <td><%= truckBooking.dropoffLocation %></td>
+              <td><%= truckBooking.pickupDate ? new Date(truckBooking.pickupDate).toISOString().split('T')[0] : '' %></td>
+              <td><%= truckBooking.pickupTime %></td>
+              <td><%= truckBooking.dropoffDate ? new Date(truckBooking.dropoffDate).toISOString().split('T')[0] : '' %></td>
+              <td><%= truckBooking.estimatedDropoffTime %></td>
+              <td><%= truckBooking.estimatedDeliveryDate ? new Date(truckBooking.estimatedDeliveryDate).toISOString().split('T')[0] : '' %></td>
+              <td><%= truckBooking.estimatedDeliveryTime %></td>
+              <td class="d-flex">
+                <a href="/truckbookings/<%= truckBooking._id %>/edit" class="btn btn-sm btn-warning me-1">Edit</a>
+                <form action="/<%= truckBooking._id %>?_method=DELETE" method="POST" class="d-inline">
+                  <button class="btn btn-sm btn-danger">Delete</button>
+                </form>                
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="13" class="text-center">No bookings available.</td></tr>
+        <% } %>
+      </tbody>      
+    </table>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const editButtons = document.querySelectorAll(".edit-btn");
+    const form = document.getElementById("truck-form");
+    const nameInput = document.getElementById("truck-name");
+    const licenseInput = document.getElementById("truck-license");
+    const weightInput = document.getElementById("truck-weight");
+    const formTitle = document.getElementById("form-title");
+    const formSubmit = document.getElementById("form-submit");
+    const cancelBtn = document.getElementById("cancel-edit");
+  
+    editButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.id;
+        const name = btn.dataset.name;
+        const license = btn.dataset.license;
+        const weight = btn.dataset.weight;
+  
+        form.action = `/trucks/${id}?_method=PUT`;  // Send PUT request
+        nameInput.value = name;
+        licenseInput.value = license;
+        weightInput.value = weight;
+  
+        formTitle.textContent = "Edit Truck";
+        formSubmit.textContent = "Update Truck";
+        formSubmit.classList.remove("btn-primary");
+        formSubmit.classList.add("btn-warning");
+        cancelBtn.classList.remove("d-none");
+      });
+    });
+  
+    cancelBtn.addEventListener("click", () => {
+      form.action = "/trucks";
+      nameInput.value = "";
+      licenseInput.value = "";
+      weightInput.value = "";
+      formTitle.textContent = "Add Truck";
+      formSubmit.textContent = "Add Truck";
+      formSubmit.classList.remove("btn-warning");
+      formSubmit.classList.add("btn-primary");
+      cancelBtn.classList.add("d-none");
+    });
+  </script>
+  
+  <!-- filters -->
+  <script>
+    const filters = document.querySelectorAll(".filter-input");
+    const rows = document.querySelectorAll("table tbody tr");
+  
+    filters.forEach(input => {
+  input.addEventListener("input", () => {
+    const filterValues = Array.from(filters).map(input => input.value.toLowerCase().trim());
+
+    rows.forEach(row => {
+      const cells = row.querySelectorAll("td");
+      let isVisible = true;
+
+      filterValues.forEach((val, i) => {
+        if (val && cells[i]) {
+          let cellText = cells[i].innerText.toLowerCase().trim();
+
+          // Special match for date filters
+          if (filters[i].type === "date") {
+            const cellDate = new Date(cellText).toISOString().split("T")[0];
+            isVisible = isVisible && (cellDate === val);
+          } else {
+            isVisible = isVisible && cellText.includes(val);
+          }
+        }
+      });
+
+      row.style.display = isVisible ? "" : "none";
+    });
+  });
+});
+  </script>  
+  
+  <!-- clear filters -->
+  <script>
+    function clearFilters() {
+      document.querySelectorAll(".filter-input").forEach(input => input.value = "");
+      document.querySelectorAll("table tbody tr").forEach(row => row.style.display = "");
+    }
+  </script>
+  
+</body>
+</html>

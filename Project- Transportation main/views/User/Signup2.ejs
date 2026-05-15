@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Form</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #408dda, #8ed2ed);
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.3), -10px -10px 30px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            width: 350px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            color: black;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+        }
+        input::placeholder {
+            color: rgba(0, 0, 0, 0.7);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #00509E, #0078D7);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: -8px;
+            margin-bottom: 10px;
+        }
+        .login-link {
+            color: white;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .login-link a {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Sign Up</h2>
+        <form id="signupForm" action="/user/signup" method="POST" onsubmit="return validateForm()">
+            <input type="text" id="name" name="name" placeholder="Name" required>
+            <div class="error" id="nameError"></div>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <div class="error" id="emailError"></div>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <div class="error" id="passwordError"></div>
+            <input type="password" id="password" name=" confirm " placeholder=" confirm Password" required>
+            <div class="error" id="confirmError"></div>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p class="login-link">Already have an account? <a href="User/login">Login here</a></p>
+    </div>
+    <script>
+        function validateForm() {
+            let valid = true;
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('confirmError').textContent = '';
+
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm').value;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (name.length < 3) {
+                document.getElementById('nameError').textContent = 'Name must be at least 3 characters long';
+                valid = false;
+            }
+            if (!emailPattern.test(email)) {
+                document.getElementById('emailError').textContent = 'Enter a valid email address';
+                valid = false;
+            }
+            if (password.length < 6) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 6 characters long';
+                valid = false;
+            }
+            if (password.length < 6) {
+                document.getElementById('confirmError').textContent = 'enter the write password';
+                valid = false;
+            }
+            
+            return valid;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Favicon -->
+<link href="img/favicon.ico" rel="icon">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- Owl Carousel -->
+<link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="css/style.css" rel="stylesheet">
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+   <style>
+    .container1 {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+    }
+   </style>
+</head>
+
+<body>
+<!--topbar  start-->
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container-fluid">
+    <img src="img/truck logo.jpg" height="90px" width="260px">
+        <div class="d-flex justify-content-between">
+            <a href="/login" class="btn btn-outline-primary me-2">
+                <i class="fas fa-user"></i> Login
+            </a>
+            <a href="/signup" class="btn btn-outline-primary">
+                <i class="fas fa-user"></i> Sign Up
+            </a>
+        </div>
+    </div>
+</nav>
+<!---topbar end-->
+
+ 
+
+<!-- Navbar Start -->
+<nav class="navbar navbar-expand-lg navbar-light py-3">
+    <div class="container">
+        <a href="<%= '/' %>" class="navbar-brand ml-lg-3">
+            <h1 class="m-0 displat text-uppercase" style="color:white"> <i class="fa fa-truck mr-2"></i>GKTC</h1>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a href="<%= '/' %>" class="nav-link <%= currentPage === 'home' ? 'active' : '' %>">Home</a></li>
+                <li class="nav-item"><a href="<%= '/aboutUs' %>" class="nav-link <%= currentPage === 'aboutUs' ? 'active' : '' %>">About Us</a></li>
+                <li class="nav-item"><a href="<%= '/bookings' %>" class="nav-link <%= currentPage === 'bookings' ? 'active' : '' %>">Bookings</a></li>
+                <li class="nav-item"><a href="<%= '/fleetTypes' %>" class="nav-link <%= currentPage === 'fleetTypes' ? 'active' : '' %>">Fleet Types</a></li>
+                <li class="nav-item"><a href="<%= '/solutions' %>" class="nav-link <%= currentPage === 'solutions' ? 'active' : '' %>">Solutions</a></li>
+                <li class="nav-item"><a href="<%= '/careers' %>" class="nav-link <%= currentPage === 'careers' ? 'active' : '' %>">Careers</a></li>
+                <li class="nav-item"><a href="<%= '/contactUs' %>" class="nav-link <%= currentPage === 'contactUs' ? 'active' : '' %>">Contact Us</a></li>
+              </ul>
+              
+              
+        </div>
+    </div>
+</nav>
+<!-- Navbar End --> 
+ <!-- careers start -->
+ <div class="container1">
+    <h1 class="job-heading">Join Our Team</h1>
+    <div id="jobs-list"></div>
+</div>
+
+<script>
+    const jobs = [
+        {
+            title: "Delivery Driver",
+            qualifications: [
+                "Valid driver’s license (commercial if required)",
+                "Experience in material transportation",
+                "Good knowledge of routes and navigation"
+            ]
+        },
+        {
+            title: "Vehicle Maintenance Technician",
+            qualifications: [
+                "Experience in vehicle repair and maintenance",
+                "Knowledge of engine diagnostics",
+                "Ability to work with different vehicle types"
+            ]
+        },
+        {
+            title: "Route Planner",
+            qualifications: [
+                "Strong understanding of mapping and navigation software",
+                "Ability to optimize delivery routes",
+                "Experience in traffic pattern analysis"
+            ]
+        },
+        {
+            title: "Operations Coordinator",
+            qualifications: [
+                "Experience in transportation scheduling",
+                "Strong organizational skills",
+                "Ability to handle customer and driver coordination"
+            ]
+        },
+        {
+            title: "Customer Support Representative",
+            qualifications: [
+                "Strong communication skills",
+                "Experience in handling customer inquiries",
+                "Ability to track and update delivery status"
+            ]
+        }
+    ];
+
+    const jobsList = document.getElementById("jobs-list");
+
+    jobs.forEach(job => {
+        const jobCard = document.createElement("div");
+        jobCard.classList.add("job-card");
+
+        const title = document.createElement("div");
+        title.classList.add("job-title");
+        title.textContent = job.title;
+
+        const qualifications = document.createElement("ul");
+        qualifications.classList.add("qualifications");
+        job.qualifications.forEach(qual => {
+            const li = document.createElement("li");
+            li.textContent = qual;
+            qualifications.appendChild(li);
+        });
+
+        jobCard.appendChild(title);
+        jobCard.appendChild(qualifications);
+        jobsList.appendChild(jobCard);
+        jobCard.classList.add("slideUp-animation");
+    });
+</script>
+<!-- careers end -->
+
+<!-- Footer Start -->
+<div class="container-fluid bg-dark text-white mt-5 py-5 px-sm-3 px-md-5">
+    <div class="row pt-5">
+        <div class="col-lg-7 col-md-6">
+            <div class="row">
+                <div class="col-md-6 mb-5">
+                    <h3 class="text-primary mb-4">Get In Touch</h3>
+                    <p><i class="fa fa-map-marker-alt mr-2"></i>Plot No. 71, Transport Nagar, Jalandhar, Punjab.</p>
+                    <p><i class="fa fa-phone-alt mr-2"></i>99142-93506</p>
+                    <p><i class="fa fa-envelope mr-2"></i> Gurukirpa1974@gmail.com</p>
+                    <div class="d-flex justify-content-start mt-4">
+                        <a class="btn btn-outline-light btn-social mr-2" href="#"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-5">
+                    <h3 class="text-primary mb-4">Quick Links</h3>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="text-white mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                        <a class="text-white mb-2" href="/aboutUs"><i class="fa fa-angle-right mr-2"></i>About Us</a>
+                        <a class="text-white mb-2" href="/bookings"><i class="fa fa-angle-right mr-2"></i>Bookings</a>
+                        <a class="text-white mb-2" href="/fleetTypes"><i class="fa fa-angle-right mr-2"></i>Fleet Types</a>
+                        <a class="text-white mb-2" href="/solutions"><i class="fa fa-angle-right mr-2"></i>Solutions</a>
+                        <a class="text-white" href="/contactUs"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 col-md-6 mb-5">
+            <h3 class="text-primary mb-4">Newsletter</h3>
+            <p>Stay updated with our latest news and offers.</p>
+            <a href="#" class="btn btn-primary d-inline-flex flex-row align-items-center email-btn" data-toggle="modal" data-target="#signInModal">Sign&nbsp;in<i class="fa-solid fa-chevron-down login"></i></a>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="signInModal" tabindex="-1" aria-labelledby="signInModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between">
+                            <h3 class="modal-title text-primary" id="signInModalLabel">Sign In</h3>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/signin" method="POST">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" class="form-control" id="name" placeholder="Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone No</label>
+                                    <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone No" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
+                                </div>
+                                <br>
+                                <button type="submit" class="btn btn-primary">Sign In</button>
+                                <br><br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: #3E3E4E !important;">
+    <div class="row">
+        <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
+            <p class="m-0 text-white">&copy; Copyright <%= new Date().getFullYear() %>. All rights reserved. Guru Kirpa Transport Company.</p>
+        </div>
+        <div class="col-lg-6 text-center text-md-right">
+            <ul class="nav d-inline-flex">
+                <li class="nav-item">
+                    <a class="nav-link text-white py-0" href="/privacy">Privacy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white py-0" href="/Faqs">FAQs</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Footer End -->
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-lg btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+    
+                  
+
+</body>
+</html>

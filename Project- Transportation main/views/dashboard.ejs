@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - Bookings</title>
+  <script src="https://kit.fontawesome.com/YOUR_FONT_AWESOME_KIT.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/YOUR-KIT-ID.js" crossorigin="anonymous"></script>
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/admin.css" rel="stylesheet">
+
+  <style>
+     /* Table Styling */
+  .container {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .custom-table {
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .custom-table thead {
+    background: linear-gradient(to right, #343a40, #495057);
+    color: white;
+    font-weight: bold;
+  }
+
+  .custom-table th, 
+  .custom-table td {
+    vertical-align: middle;
+    padding: 8px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .email-cell {
+    max-width: 160px;
+    word-break: break-word;
+  }
+
+  .table-hover tbody tr:hover {
+    background: rgba(0, 123, 255, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* Approve Button Styling */
+  .approve-btn {
+    border-radius: 20px;
+    transition: all 0.3s ease-in-out;
+    background-color: #28a745;
+    border: none;
+  }
+  .reject-btn {
+    border-radius: 20px;
+    transition: all 0.3s ease-in-out;
+    border: none;
+  }
+
+  .approve-btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+  }
+  .reject-btn:hover {
+    transform: scale(1.05);
+  }
+
+  /* Footer Styling */
+.admin-footer {
+    background: linear-gradient(to right, #141e30, #243b55); /* Deep Blue Gradient */
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: auto;
+    padding: 10px 20px;
+}
+
+/* Responsive Centering for Mobile */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Logo & Branding */
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.footer-logo h2 {
+    font-size: 18px;
+    font-weight: bold;
+}
+img{
+  height: 170px;
+
+}
+
+/* Quick Links */
+.footer-links {
+    display: flex;
+    gap: 15px;
+}
+
+.footer-links a {
+    color: #facc15;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.footer-links a:hover {
+    color: #ffcc00;
+}
+
+/* Responsive Quick Links for Mobile */
+@media (max-width: 768px) {
+    .footer-links {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* Contact & Copyright */
+.footer-contact {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Bottom Footer */
+.footer-bottom {
+    background: #141e30;
+    color: #fff;
+    padding: 12px;
+    font-size: 13px;
+    text-align: center;
+    border-top: 2px solid #00aaff; /* Blue border on top */
+}
+
+/* Responsive Footer Bottom */
+@media (max-width: 480px) {
+    .footer-bottom {
+        font-size: 12px;
+        padding: 10px;
+    }
+}
+
+  </style>
+</head>
+
+<body>
+  <!--Topbar Start-->
+  <div class="container-fluid topbar d-flex align-items-center justify-content-between p-3 shadow-lg" style="background: linear-gradient(135deg, #007bff, #6610f2); border-radius: 10px;">
+    <div class="d-flex align-items-center">
+        <!-- Uncomment to use logo -->
+        <!-- <img src="img/truck-logo.jpg" height="90px" width="260px" alt="Logo"> -->
+        <h1 class="fw-bold mb-0 ms-3" style="color: white; text-shadow: 2px 2px 5px rgba(0,0,0,0.3);">GKTC</h1>
+    </div>
+
+    <!-- User Icon & Logout Button -->
+    <div class="d-flex align-items-center">
+        <i class="fa-solid fa-user fa-2x text-white me-2" style="background: rgba(255, 255, 255, 0.2); padding: 8px; border-radius: 50%;"></i>
+
+        <!-- Uncomment to use Login button -->
+        <!-- <a href="#" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#loginModal">
+            Login <i class="fa-solid fa-chevron-down ms-1"></i>
+        </a> -->
+        <a href="/admin/trucks_dashboard" class="btn btn-outline-dark ms-2 admin-btn" style="border-radius: 25px; padding: 8px 20px; transition: all 0.3s ease; ; font-weight:700; border-color:#ffffff; font-size: 17px">
+          Trucks Dashboard<i class="fa-solid fa-sign-out-alt ms-1"></i>
+        </a>
+        <a href="/admin/logout" class="btn btn-outline-dark ms-2 admin-btn" style="border-radius: 25px; padding: 8px 20px; transition: all 0.3s ease; font-size: 17px;font-weight:700; border-color:#ffffff">
+            Logout <i class="fa-solid fa-sign-out-alt ms-1"></i>
+        </a>
+    </div>
+</div>
+
+
+    <!-- Modal --->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog login-form">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title text-primary" id="loginModalLabel">Login</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/login" method="POST">
+              <div class="mb-3">
+                <label for="userType" class="form-label">Select Type</label>
+                <select class="form-select" name="userType" id="userType" required>
+                  <option value="Business">Business</option>
+                  <option value="Personal">Personal</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password"
+                  required>
+              </div>
+              <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--- login end -->
+  </div>
+  </div>
+  <!--- fleet types start --->
+
+  
+ <div class="container-fluid mt-5">
+  <div class="row d-flex justify-content-evenly">
+      <!-- Card 1 -->
+      <div class="col-md-3 mb-4">
+          <div class="card shadow-lg border-0 rounded-4 d-flex flex-column h-100">
+              <div class="img-container" style="height: 200px; overflow: hidden;">
+                  <img src="/img/avtr.jpg" class="card-img-top" alt="Card 1 Image" style="object-fit: cover; width: 100%; height: 100%;">
+              </div>
+              <div class="card-body d-flex flex-column justify-content-between text-center p-5" style="min-height: 200px;">
+                  <h5 class="card-title fw-bold text-primary">Ashok Leyland AVTR 4120</h5>
+                  <ul class="list-unstyled">
+                      <li>Dual type Lift axle on second axle</li>
+                      <li>H-series CRS iGen-6 technology</li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="col-md-3 mb-4">
+          <div class="card shadow-lg border-0 rounded-4 d-flex flex-column h-100">
+              <div class="img-container" style="height: 200px; overflow: hidden;">
+                  <img src="/img/tatasigna.jpg" class="card-img-top" alt="Card 2 Image" style="object-fit: cover; width: 100%; height: 100%;">
+              </div>
+              <div class="card-body d-flex flex-column justify-content-between text-center p-5" style="min-height: 200px;">
+                  <h5 class="card-title fw-bold text-primary">Tata Signa 3523.TK</h5>
+                  <ul class="list-unstyled">
+                      <li>Dual type Lift axle on second axle</li>
+                      <li>H-series CRS iGen-6 technology</li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="col-md-3 mb-4">
+          <div class="card shadow-lg border-0 rounded-4 d-flex flex-column h-100">
+              <div class="img-container" style="height: 200px; overflow: hidden;">
+                  <img src="/img/AMW2518HL.jpg" class="card-img-top" alt="Card 3 Image" style="object-fit: cover; width: 100%; height: 100%;">
+              </div>
+              <div class="card-body d-flex flex-column justify-content-between text-center p-5" style="min-height: 200px;">
+                  <h5 class="card-title fw-bold text-primary">Blazo X 28 BS6</h5>
+                  <ul class="list-unstyled">
+                      <li>Engine MPOWER 7.2 L FuelSmart</li>
+                      <li>Full Air S Cam Dual Circuit ABS 10 BAR system</li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="col-md-3 mb-4">
+          <div class="card shadow-lg border-0 rounded-4 d-flex flex-column h-100">
+              <div class="img-container" style="height: 200px; overflow: hidden;">
+                  <img src="/img/Trucxo_25reefer.jpg" class="card-img-top" alt="Card 4 Image" style="object-fit: cover; width: 100%; height: 100%;">
+              </div>
+              <div class="card-body d-flex flex-column justify-content-between text-center p-5" style="min-height: 200px;">
+                  <h5 class="card-title fw-bold text-primary">Truxo 25 Reefer</h5>
+                  <ul class="list-unstyled">
+                      <li>Load capacity: 42.3 - 49.3 CuM</li>
+                      <li>7.2 Litre 6-Cylinder TCIC BS-III diesel engine</li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!---fleet type end-->
+<div class="container mb-5">
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-body px-4 py-5 bg-light">
+
+      <form action="/admin/bookings/filter" method="GET" class="row gy-4 justify-content-center">
+
+        <!-- Booking From and To Date -->
+        <div class="col-md-4">
+          <label class="form-label fw-semibold text-muted">Booking From Date</label>
+          <input type="date" name="fromDate" class="form-control form-control-lg rounded-3 shadow-sm" value="<%= query?.fromDate || '' %>">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-semibold text-muted">Booking To Date</label>
+          <input type="date" name="toDate" class="form-control form-control-lg rounded-3 shadow-sm" value="<%= query?.toDate || '' %>">
+        </div>
+
+        <!-- Buttons Row -->
+        <div class="col-12 text-center mt-3">
+          <button type="submit" class="btn btn-primary btn-lg px-4 py-2 rounded-pill shadow-sm me-3">
+            <i class="bi bi-funnel-fill me-1"></i> Filter
+          </button>
+          <a href="/admin/bookings" class="btn btn-outline-secondary btn-lg px-4 py-2 rounded-pill shadow-sm">
+            <i class="bi bi-x-circle me-1"></i> Clear
+          </a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+  <h1 class="text-center text-primary fw-bold mb-3">Requests</h1>
+<div class="container">
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered text-center align-middle shadow-sm rounded-3 overflow-hidden custom-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>from</th>
+          <th>to</th>
+          <th>Weight(in Tonnes)</th>
+          <th>Sender's address</th>
+          <th>Destination address</th>
+          <th>Booking Date</th>
+          <th>Delivery Date</th>
+          <th>Delivery Time</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% bookings.forEach(booking => { %>
+          <tr>
+            <td><%= booking.name %></td>
+            <td class="email-cell"><%= booking.email %></td>
+            <td><%= booking.phone %></td>
+            <td><%= booking.from %></td>
+            <td><%= booking.to %></td>
+            <td><%= booking.weight %> tonnes</td>
+            <td><%= booking.Senderaddress %></td>
+            <td><%= booking.Receiveraddress %></td>
+            <td><%= booking.bDate %></td>
+            <td><%= booking.dDate %></td>
+            <td><%= booking.dTime %></td>
+            <td class="fw-bold text-success">$<%= booking.price %></td>
+            <td>
+              <button class="btn btn-success btn-sm px-3 shadow-sm approve-btn" onclick="showApprovalEmailForm('<%= booking._id %>', '<%= booking.email %>')">
+                <i class="fas fa-check-circle"></i> Approve
+              </button>
+              <button class="btn btn-danger btn-sm px-3 shadow-sm reject-btn" onclick="showRejectionEmailForm('<%= booking._id %>', '<%= booking.email %>')">
+                <i class="fas fa-check-circle"></i> Reject
+              </button>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+ 
+<footer class="admin-footer">
+  <div class="footer-container">
+      
+      <!-- Logo & Branding -->
+      <div class="footer-logo">
+          <h2>GKTC</h2>
+          <h2>Truck Transport Admin</h2>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-links">
+          <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+          <a href="/admin/bookings"><i class="fas fa-truck-loading"></i> Bookings</a>
+      
+      </div>
+
+      <!-- Copyright & Contact -->
+      <div class="footer-contact">
+          <p>© <%= new Date().getFullYear() %> Truck Management. All Rights Reserved.</p>
+          <p>📧 support@truckadmin.com</p>
+      </div>
+
+  </div>
+
+  <!-- Bottom Border -->
+  <div class="footer-bottom">
+      Designed & Developed for Logistics Management 🚛
+  </div>
+</footer>
+
+
+
+  <!-- Email Form Modal  Approval-->
+  <div class="modal fade" id="emailModalapproval" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Send Approval Email</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="emailForm" onsubmit="sendEmailapproval(); return false;">
+            <input type="hidden" id="bookingId" name="bookingId">
+            <input type="hidden" id="userEmail" name="userEmail">
+            <div class="mb-3">
+              <label for="subject" class="form-label">Subject</label>
+              <input type="text" class="form-control" id="subject" name="subject" required>
+            </div>
+            <div class="mb-3">
+              <label for="message" class="form-label">Message</label>
+              <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Email</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+ <!-- Email Form Modal  Rejection-->
+ <!-- Rejection Email Modal -->
+<div class="modal fade" id="emailModalrejection" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Send Rejection Email</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="emailFormRejection" onsubmit="sendEmailrejection(); return false;">
+          <input type="hidden" id="bookingIdRejection" name="bookingId">
+          <input type="hidden" id="userEmailRejection" name="userEmail">
+          <div class="mb-3">
+            <label for="subjectRejection" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="subjectRejection" name="subject" required>
+          </div>
+          <div class="mb-3">
+            <label for="messageRejection" class="form-label">Message</label>
+            <textarea class="form-control" id="messageRejection" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Email</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+  <script>
+  
+
+
+    function showApprovalEmailForm(bookingId, userEmail) {
+  document.getElementById('bookingId').value = bookingId;
+  document.getElementById('userEmail').value = userEmail;
+  const emailModal = new bootstrap.Modal(document.getElementById('emailModalapproval'));
+  emailModal.show();
+}
+    function sendEmailapproval() {
+      const formData = {
+        bookingId: document.getElementById('bookingId').value,
+        userEmail: document.getElementById('userEmail').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value,
+      };
+
+      fetch('/booking/approve', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message);
+          location.reload();
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Failed to send email');
+        });
+    }
+
+    
+    function showRejectionEmailForm(bookingId, userEmail) {
+      console.log("Booking ID to reject:", bookingId); 
+  document.getElementById('bookingIdRejection').value = bookingId;
+  document.getElementById('userEmailRejection').value = userEmail;
+  const emailModal = new bootstrap.Modal(document.getElementById('emailModalrejection'));
+  emailModal.show();
+}
+
+function sendEmailrejection() {
+  const formData = {
+    bookingId: document.getElementById('bookingIdRejection').value,
+    userEmail: document.getElementById('userEmailRejection').value,
+    subject: document.getElementById('subjectRejection').value,
+    message: document.getElementById('messageRejection').value,
+  };
+  console.log("Sending rejection for booking ID:", formData.bookingId);
+
+  fetch('/booking/reject', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData)
+  })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.message);
+      location.reload();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Failed to send email');
+    });
+}
+
+
+    function logout() {
+      fetch('/logout', {
+        method: 'POST',
+        credentials: 'include'
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message);
+          window.location.href = '/login';  // Redirect to login page
+        })
+        .catch(error => {
+          console.error('Logout failed:', error);
+          alert('Logout failed');
+        });
+    }
+
+
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
