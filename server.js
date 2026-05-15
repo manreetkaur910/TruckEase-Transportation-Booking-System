@@ -8,7 +8,7 @@
  const bodyParser=require('body-parser')
  const User = require('./models/UserLogin');
   const ensureAuthenticated = require('./Project- Transportation main/middleware/auth'); 
-
+require('dotenv').config();
 const methodOverride = require("method-override");
 
  const path = require('path');
@@ -34,7 +34,7 @@ app.use(session({ secret: "12345anand", resave: false, saveUninitialized: false 
 
 
 // // Connect to MongoDB
- mongoose.connect('mongodb://localhost:27017/truckease')
+ mongoose.connect(process.env.MONGO_URI)
    .then(() => console.log('MongoDB connected'))
    .catch(err => console.log('MongoDB connection error:', err));
 
@@ -293,8 +293,8 @@ app.get("/admin/logout", (req, res) => {
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'jasleenkaur8434@gmail.com',
-    pass: 'uyvc vrnl vgio vvhr'
+    user: 'process.env.EMAIL_USER',
+    pass: 'process.env.EMAIL_PASS'
   }
 });
 
